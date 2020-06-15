@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Defines the custom XML attributes supported for a HorizontalListView -->
+    <declare-styleable name="HorizontalListView">
+        <attr name="dividerWidth" format="dimension" />
+        <attr name="android:divider" />
+        <attr name="android:requiresFadingEdge" />
+        <attr name="android:fadingEdgeLength" />
+    </declare-styleable>
+
+    <declare-styleable name="TintableImageView">
+        <attr name="tint" format="reference|color"/>
+    </declare-styleable>
+    <attr name="scrollMode" >
+        <enum name="alignScroll" value="0"/>
+        <enum name="followScroll" value="1"/>
+        <enum name="normalScroll" value="2" />
+    </attr>
+    <attr name="surface_type" format="enum">
+        <enum name="none" value="0"/>
+        <enum name="surface_view" value="1"/>
+        <enum name="texture_view" value="2"/>
+        <enum name="spherical_gl_surface_view" value="3"/>
+        <enum name="video_decoder_gl_surface_view" value="4"/>
+    </attr>
+    <declare-styleable name="TvRecyclerView">
+        <attr name="scrollMode"/>
+        <attr name="focusDrawable" format="reference" />
+        <attr name="isAutoProcessFocus" format="boolean" />
+        <attr name="focusScale" format="float" />
+        <attr name="isLive" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="GaugeView">
+        <attr name="gauge_backgroundColor" format="color" />
+        <attr name="gauge_fillColor" format="color" />
+        <attr name="gauge_strokeWidth" format="dimension" />
+        <attr name="gauge_startAngle" format="integer" />
+        <attr name="gauge_angles" format="integer" />
+        <attr name="gauge_maxValue" format="integer" />
+    </declare-styleable>
+</resources>
