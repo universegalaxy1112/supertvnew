@@ -1,16 +1,12 @@
 package com.uni.julio.supertvplus.view;
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.WindowManager;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.uni.julio.supertvplus.LiveTvApplication;
 import com.uni.julio.supertvplus.R;
 import com.uni.julio.supertvplus.model.ModelTypes;
@@ -36,33 +32,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        Tracking.getInstance().enableTrack(true);
-        Tracking.getInstance().enableSleep(false);
         if(!(this instanceof VideoPlayActivity)){
             Tracking.getInstance().setAction(getClass().getSimpleName());
         }
-        Tracking.getInstance().track();
         if(getViewModel() != null)
             getViewModel().onViewResumed();
         LiveTvApplication.appContext = this;
-
     }
+
     @Override
     public void onPause(){
         super.onPause();
-        Tracking.getInstance().enableTrack(true);
-        Tracking.getInstance().enableSleep(true);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(Tracking.getInstance().getSleep()){
-                    Tracking.getInstance().setAction("Sleeping");
-                    Tracking.getInstance().track();
-                    Tracking.getInstance().enableSleep(false);
-                    Tracking.getInstance().enableTrack(false);
-                }
-            }
-        },1000);
         Context appCompatActivity=LiveTvApplication.appContext;
         if(this.equals(appCompatActivity))
             LiveTvApplication.appContext = null;

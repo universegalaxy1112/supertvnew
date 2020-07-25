@@ -7,14 +7,18 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.android.billingclient.api.Purchase;
 import com.uni.julio.supertvplus.LiveTvApplication;
 import com.uni.julio.supertvplus.R;
 import com.uni.julio.supertvplus.listeners.DialogListener;
 import com.uni.julio.supertvplus.listeners.MessageCallbackListener;
+
+import java.util.List;
 
 public class Dialogs {
 
@@ -197,4 +201,6 @@ public class Dialogs {
         }
 
     }
+
+
 }

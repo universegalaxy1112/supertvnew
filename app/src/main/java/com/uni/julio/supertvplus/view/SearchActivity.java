@@ -44,7 +44,7 @@ public class SearchActivity extends BaseActivity implements SearchViewModelContr
 
         try{
             String query = "";
-            Bundle extras = getActivity().getIntent().getExtras();
+            Bundle extras = getIntent().getExtras();
             if(extras != null) {
                 selectedType = (ModelTypes.SelectedType) extras.get("selectedType");
                 mainCategoryId = extras.getInt("mainCategoryId",0);

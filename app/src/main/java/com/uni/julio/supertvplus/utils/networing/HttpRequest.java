@@ -59,7 +59,7 @@ public class HttpRequest {
                 HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                     @Override
                     public boolean verify(String hostname, SSLSession session) {
-                        return true;
+                        return true;//(session.isValid() && hostname != null && (hostname.toLowerCase().contains("supertvultra.com") || hostname.toLowerCase().contains("superteve.com") || hostname.toLowerCase().contains("firebaseinstallations.googleapis.com")));
                     }
                 });
 

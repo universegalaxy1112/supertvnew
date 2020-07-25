@@ -1,10 +1,6 @@
 package com.uni.julio.supertvplus.utils.networing;
 
-import android.os.Build;
 import android.text.TextUtils;
-
-import androidx.annotation.RequiresApi;
-
 import com.uni.julio.supertvplus.listeners.StringRequestListener;
 import com.uni.julio.supertvplus.model.LiveProgram;
 import com.uni.julio.supertvplus.model.LiveTVCategory;
@@ -14,52 +10,62 @@ import com.uni.julio.supertvplus.model.Serie;
 import com.uni.julio.supertvplus.model.VideoStream;
 import com.uni.julio.supertvplus.utils.Device;
 import com.uni.julio.supertvplus.utils.networing.parser.FetchJSonFileSync;
-
 import java.net.URLEncoder;
 import java.util.List;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-//import com.livetv.android.utils.networking.parser.FetchJSonFile;
-
 public class LiveTVServicesManual {
-    public static Observable<Boolean> performLogin (final String usr, final String pss, final StringRequestListener stringRequestListener) {
+
+    static Observable<Boolean> performLogin(final String usr, final String pss, final StringRequestListener stringRequestListener) {
 
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
                 subscriber.onNext(loginRequest(usr, pss, stringRequestListener));
                 subscriber.onCompleted();
             }
-        })
-                .subscribeOn(Schedulers.computation())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        }).subscribeOn(Schedulers.computation())
+        .unsubscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
     }
-    public static Observable<List<LiveTVCategory>> getLiveTVCategories(final MainCategory category) {
+
+    static Observable<Boolean> performSignUp(final String email, final String userName, final String pass, final StringRequestListener stringRequestListener) {
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                subscriber.onNext(signUpRequest(email, userName, pass, stringRequestListener));
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.computation())
+        .unsubscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+    }
+
+     static Observable<List<LiveTVCategory>> getLiveTVCategories(final MainCategory category) {
         return Observable.create(new Observable.OnSubscribe<List<LiveTVCategory>>() {
             @Override
             public void call(Subscriber<? super List<LiveTVCategory>> subscriber) {
                 subscriber.onNext(retrieveLiveTVCategories(category));
                 subscriber.onCompleted();
             }
-        })      .subscribeOn(Schedulers.computation())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        }).subscribeOn(Schedulers.computation())
+        .unsubscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
     }
+
     private static List<? extends VideoStream> retrieveEpisodesForSerie(Serie serie, Integer season) {
         FetchJSonFileSync fetch = new FetchJSonFileSync();
         return fetch.retrieveMoviesForSerie(serie, season);
     }
+
     private static List<LiveTVCategory> retrieveLiveTVCategories(MainCategory category) {
         FetchJSonFileSync fetch = new FetchJSonFileSync();
         return fetch.retrieveLiveTVCategories(category);
     }
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     private static boolean loginRequest(String usr, String pss, final StringRequestListener stringRequestListener) {
         String loginUrl;
          try {
@@ -72,7 +78,7 @@ public class LiveTVServicesManual {
                     .replace("{COUNTRY}", URLEncoder.encode(Device.getCountry(), "UTF-8"))
                     .replace("{ISTV}", Device.treatAsBox ? "1" : "0");
         } catch (Exception e) {
-            loginUrl = "";
+                 loginUrl = "";
         }
 //        Log.d("liveTV","PerformLogin + "+ loginUrl);
         if(!TextUtils.isEmpty(loginUrl)) {
@@ -90,16 +96,50 @@ public class LiveTVServicesManual {
         }
         return true;
     }
-    public static Observable<Boolean> performLoginCode(final String user,final String code, final String device_id,final StringRequestListener stringRequestListener) {
+
+    private static boolean signUpRequest(String email, String usr, String pss, final StringRequestListener stringRequestListener) {
+
+        String signUpUrl;
+        try {
+            signUpUrl = WebConfig.signUpURL
+                    .replace("{EMAIL}", email)
+                    .replace("{USER}",usr)
+                    .replace("{PASS}",pss)
+                    .replace("{DEVICE_ID}", Device.getIdentifier())
+                    .replace("{MODEL}", URLEncoder.encode(Device.getModel(), "UTF-8"))
+                    .replace("{FW}", URLEncoder.encode(Device.getFW(), "UTF-8"))
+                    .replace("{COUNTRY}", URLEncoder.encode(Device.getCountry(), "UTF-8"));
+        } catch (Exception e) {
+            signUpUrl = "";
+        }
+
+        if(!TextUtils.isEmpty(signUpUrl)) {
+
+            NetManager.getInstance().makeStringRequest(signUpUrl, new StringRequestListener() {
+                @Override
+                public void onCompleted(String response) {
+                    stringRequestListener.onCompleted(response);
+                }
+                @Override
+                public void onError() {
+                    stringRequestListener.onError();
+                }
+            });
+        }
+        return true;
+    }
+
+    static Observable<Boolean> performLoginCode(final String user,final String code, final String device_id, final String content, final StringRequestListener stringRequestListener) {
         return Observable.create( new Observable.OnSubscribe<Boolean>() {
             public void call(Subscriber<? super Boolean> subscriber) {
-                subscriber.onNext(Boolean.valueOf(LiveTVServicesManual.loginCodeRequest(user,code,device_id, stringRequestListener)));
+                subscriber.onNext(Boolean.valueOf(LiveTVServicesManual.loginCodeRequest(user,code,device_id, content, stringRequestListener)));
                 subscriber.onCompleted();
             }
         }) .subscribeOn(Schedulers.computation())
                 .unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
-    public static Observable<Boolean> getMessages(final String user, final StringRequestListener stringRequestListener) {
+
+    static Observable<Boolean> getMessages(final String user, final StringRequestListener stringRequestListener) {
         return Observable.create( new Observable.OnSubscribe<Boolean>() {
             public void call(Subscriber<? super Boolean> subscriber) {
                 subscriber.onNext(Boolean.valueOf(LiveTVServicesManual.messageRequest(user,stringRequestListener)));
@@ -108,7 +148,8 @@ public class LiveTVServicesManual {
         }) .subscribeOn(Schedulers.computation())
                 .unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
-    public static boolean messageRequest(String user,final StringRequestListener stringRequestListener){
+
+    private static boolean messageRequest(String user, final StringRequestListener stringRequestListener){
         String messageUrl=WebConfig.getMessage;
         try{
             NetManager.getInstance().makeStringRequest(messageUrl.replace("{USER}", user), new StringRequestListener() {
@@ -127,13 +168,15 @@ public class LiveTVServicesManual {
         }
         return true;
     }
-    public static boolean loginCodeRequest(String user,String code, String device_id,final StringRequestListener stringRequestListener) {
+
+    private static boolean loginCodeRequest(String user, String code, String device_id, String content, final StringRequestListener stringRequestListener) {
         String loginCodeUrl;
         try {
             loginCodeUrl = WebConfig.LoginSplash.replace("{USER}", user)
                                                 .replace("{PASS}",code)
                                                 .replace("{DEVICE_ID}",device_id)
-                                                .replace("{ISTV}", Device.treatAsBox ? "1" : "0");
+                                                .replace("{ISTV}", Device.treatAsBox ? "1" : "0")
+                                                .replace("{MOVIE}", content);
         } catch (Exception e) {
             loginCodeUrl = "";
         }

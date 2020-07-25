@@ -8,26 +8,19 @@
         android:id="@+id/test"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/dip_16"
         android:orientation="horizontal">
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-                <TextView
+    <!--<TextView
                     style="@style/text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/login_screen_username" />
 
                 <EditText
-                    android:id="@+id/edit_username"
+                    android:id="@+id/edit_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/netflix_red"
@@ -61,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/transparent"
-                    app:cardCornerRadius="@dimen/dip_16">
+                    app:cardCornerRadius="@dimen/dip_12">
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -76,86 +69,152 @@
                             android:paddingStart="@dimen/dip_8"
                             android:paddingEnd="@dimen/dip_8"
                             android:background="@drawable/background_sign_in_up"
-                            android:text="@string/sign_in_lower"
-                            />
+                            android:text="@string/sign_in_lower" />
                     </RelativeLayout>
 
-                </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>-->
+    <!-- <LinearLayout
+         android:orientation="horizontal"
+         android:gravity="center_vertical"
+         android:layout_gravity="center_horizontal"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="@dimen/dip_12">
+         <View
+             android:layout_weight="1"
+             android:layout_width="0dp"
+             android:layout_height="0.5dp"
+             android:background="@color/white"
+             />
+         <TextView
+             android:layout_marginStart="@dimen/dip_10"
+             android:layout_marginEnd="@dimen/dip_10"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="OR"
+             android:textColor="@color/white"
+             />
+         <View
+             android:layout_weight="1"
+             android:layout_width="0dp"
+             android:layout_height="0.5dp"
+             android:background="@color/white"
+             />
+     </LinearLayout>-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_weight="0.6"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="0dp">
+                <ImageView
+                    android:layout_width="@dimen/dip_160"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/android_splash" />
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/dip_30"
+                android:layout_marginEnd="@dimen/dip_30"
+                android:layout_marginBottom="@dimen/dip_20">
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dip_12">
-                    <View
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="0.5dp"
-                        android:background="@color/white"
-                        />
-                    <TextView
-                        android:layout_marginStart="@dimen/dip_10"
-                        android:layout_marginEnd="@dimen/dip_10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="OR"
-                        android:textColor="@color/white"
-                        />
-                    <View
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="0.5dp"
-                        android:background="@color/white"
-                        />
-                </LinearLayout>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dip_12"
-                    app:cardBackgroundColor="@color/transparent"
-                    app:cardCornerRadius="@dimen/dip_16">
-                    <LinearLayout
-                        android:id="@+id/ll_FacebookSignin"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:background="@drawable/background_google_signup"
-                        android:paddingTop="@dimen/dip_8"
-                        android:paddingBottom="@dimen/dip_8"
-                        android:paddingStart="@dimen/dip_8"
-                        android:paddingEnd="@dimen/dip_8"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="true">
-                        <ImageView
-                            android:padding="@dimen/dip_1"
-                            android:layout_width="@dimen/dip_25"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_google"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/signin_with_google"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/sp_12"
-                            android:focusable="false"
-                            android:clickable="false"
-                            android:layout_marginStart="@dimen/dip_10"
-                            />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="@dimen/dip_12"
+                    android:orientation="vertical"
+                    android:layout_centerHorizontal="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+                    <!--<LinearLayout
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <View
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="0.5dp"
+                            android:background="@color/white"
+                            />
+                        <TextView
+                            android:layout_marginStart="@dimen/dip_10"
+                            android:layout_marginEnd="@dimen/dip_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="OR"
+                            android:textColor="@color/white"
+                            />
+                        <View
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="0.5dp"
+                            android:background="@color/white"
+                            />
+                    </LinearLayout>-->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dip_32"
+                        app:cardBackgroundColor="@color/transparent"
+                        app:cardCornerRadius="@dimen/dip_12">
+                        <LinearLayout
+                            android:id="@+id/ll_GoogleSignin"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:background="@drawable/background_google_signup"
+                            android:paddingTop="@dimen/dip_6"
+                            android:paddingBottom="@dimen/dip_6"
+                            android:paddingStart="@dimen/dip_6"
+                            android:paddingEnd="@dimen/dip_6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="true">
+                            <ImageView
+                                android:padding="@dimen/dip_1"
+                                android:layout_width="@dimen/dip_25"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_google"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/signin_with_google"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp_12"
+                                android:focusable="false"
+                                android:clickable="false"
+                                android:layout_marginStart="@dimen/dip_10"
+                                />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    <com.google.android.gms.ads.AdView
+                        android:id="@+id/adView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dip_32"
+                        android:focusable="true"
+                        ads:adSize="BANNER"
+                        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+                    </com.google.android.gms.ads.AdView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dip_40"
+                    android:focusable="false">
                     <LinearLayout
                         android:id="@+id/tv_ForgotPw"
                         android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:focusable="false">
                         <TextView
                             android:textSize="@dimen/sp_12"
                             android:layout_width="wrap_content"
@@ -163,42 +222,48 @@
                             android:text="@string/forgot_password"
                             android:textColor="@color/white"
                             android:textStyle="italic"
-                            />
+                            android:focusable="false"/>
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dip_1"
                             android:background="@color/white"
-                            />
+                            android:focusable="false"/>
                     </LinearLayout>
                     <View
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        />
+                        android:focusable="false"/>
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <LinearLayout
-                            android:id="@+id/ll_SignUp"
                             android:orientation="vertical"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:focusable="false">
                             <TextView
+                                android:id="@+id/ll_SignUp"
                                 android:textSize="@dimen/sp_12"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/sign_up_upper"
-                                android:textColor="@color/white"
-                                />
+                                android:focusable="true"
+                                android:textColor="@color/textview_selector" />
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dip_1"
                                 android:background="@color/white"
-                                />
+                                android:focusable="false" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
+            </RelativeLayout>
+
+
+
 
         </LinearLayout>
         <View

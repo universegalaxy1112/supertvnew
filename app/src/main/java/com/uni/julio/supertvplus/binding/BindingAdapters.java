@@ -150,7 +150,7 @@ public class BindingAdapters {
 
     @BindingAdapter({"setDate"})
     public static void setDate(TextView view, String date) {
-        view.setText(date.substring(0,date.indexOf(" ")));
+        view.setText(date);
     }
 
     @BindingAdapter({"justifyText"})

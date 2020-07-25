@@ -5,5 +5,5 @@
         android:drawable="@color/primary_dark"/>
     <item android:state_focused="true"
         android:drawable="@drawable/background_google_signup_active"/>
-    <item android:drawable="@drawable/background_google_signup_active"/>
+    <item android:drawable="@drawable/background_google_signup_normal"/>
 </selector>

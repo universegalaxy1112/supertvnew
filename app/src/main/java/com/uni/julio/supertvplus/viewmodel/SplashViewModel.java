@@ -15,6 +15,7 @@ import com.uni.julio.supertvplus.LiveTvApplication;
 import com.uni.julio.supertvplus.R;
 import com.uni.julio.supertvplus.listeners.DownloaderListener;
 import com.uni.julio.supertvplus.listeners.StringRequestListener;
+import com.uni.julio.supertvplus.model.Subscription;
 import com.uni.julio.supertvplus.model.User;
 import com.uni.julio.supertvplus.utils.DataManager;
 import com.uni.julio.supertvplus.utils.Device;
@@ -26,7 +27,6 @@ import org.json.JSONObject;
 
 public class SplashViewModel implements SplashViewModelContract.ViewModel, StringRequestListener, DownloaderListener {
 
-//    public boolean isConnected;
     private NetManager netManager;
     private SplashViewModelContract.View viewCallback;
     private User user;
@@ -42,7 +42,6 @@ public class SplashViewModel implements SplashViewModelContract.ViewModel, Strin
 
     @Override
     public void onViewAttached(@NonNull Lifecycle.View viewCallback) {
-        //set the callback to the fragment (using the BaseFragment class)
         this.viewCallback = (SplashViewModelContract.View) viewCallback;
     }
 
@@ -53,16 +52,16 @@ public class SplashViewModel implements SplashViewModelContract.ViewModel, Strin
 
     @Override
     public void login() {
-        String usr = "";
+        String email = "";
         String password = "";
         String id = "";
         user = LiveTvApplication.getUser();
         if(user != null) {
-            usr = user.getName();
+            email = user.getEmail();
             password = user.getPassword();
             id = user.getDeviceId();
         }
-        if(TextUtils.isEmpty(usr) || TextUtils.isEmpty(password) || TextUtils.isEmpty(id)) {
+        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(id)) {
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -72,7 +71,7 @@ public class SplashViewModel implements SplashViewModelContract.ViewModel, Strin
             }, 2000);
         }
         else {
-            netManager.performLoginCode(usr,password,id,this);
+            netManager.performLoginCode(email, password, id, "", this);
         }
     }
 
@@ -80,30 +79,22 @@ public class SplashViewModel implements SplashViewModelContract.ViewModel, Strin
     public void onCompleted(String response) {
         if(!TextUtils.isEmpty(response)) {
             try {
-
                 JSONObject jsonObject = new JSONObject(response);
                 if (jsonObject.has("status") && "1".equals(jsonObject.getString("status"))) {
                     String userAgent =  jsonObject.getString("user-agent");
                     if (!jsonObject.isNull("pin")) {
                         DataManager.getInstance().saveData("adultsPassword", jsonObject.getString("pin"));
                     }
-                    if(user != null && !TextUtils.isEmpty(userAgent)) {
-                        user.setUser_agent(userAgent);
-                        user.setExpiration_date( jsonObject.getString("expire_date"));
-                        user.setDevice(Device.getModel() + " - " + Device.getFW());
-                        user.setVersion(Device.getVersion());
-                        user.setAdultos(jsonObject.getInt("adultos"));
-                        user.setDeviceId(Device.getIdentifier());
-                        DataManager.getInstance().saveData("theUser",new Gson().toJson(user));
-                        DataManager.getInstance().saveData("device_num",jsonObject.getString("device_num"));
-                        viewCallback.onLoginCompleted(true);
-                        return;
+                    if(!TextUtils.isEmpty(userAgent)) {
+                       if(LiveTvApplication.saveUser(user.getPassword(), jsonObject)) {
+                           viewCallback.onLoginCompleted(true);
+                           return;
+                       }
                     }
                 }
                 if (jsonObject.has("android_version")) {
                     Log.d("version",Device.getVersionInstalled());
                     String a=Device.getVersionInstalled().replaceAll("\\.", "");
-                    String b=jsonObject.getString("android_version");
                     if (!jsonObject.getString("android_version").equals("")&&!Device.getVersionInstalled().replaceAll("\\.", "").equals(jsonObject.getString("android_version"))) {
                         this.viewCallback.onCheckForUpdateCompleted(true, jsonObject.getString("link_android") + "/android" + jsonObject.getString("android_version") + ".apk");
                         return;

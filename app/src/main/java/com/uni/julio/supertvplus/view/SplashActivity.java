@@ -1,5 +1,6 @@
 package com.uni.julio.supertvplus.view;
 
+
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,27 +9,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.RequestConfiguration;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.uni.julio.supertvplus.LiveTvApplication;
 import com.uni.julio.supertvplus.R;
 import com.uni.julio.supertvplus.listeners.DialogListener;
-import com.uni.julio.supertvplus.model.User;
 import com.uni.julio.supertvplus.utils.Connectivity;
 import com.uni.julio.supertvplus.utils.DataManager;
 import com.uni.julio.supertvplus.utils.Device;
@@ -38,8 +27,6 @@ import com.uni.julio.supertvplus.viewmodel.Lifecycle;
 import com.uni.julio.supertvplus.viewmodel.SplashViewModel;
 import com.uni.julio.supertvplus.viewmodel.SplashViewModelContract;
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 public class SplashActivity extends BaseActivity implements SplashViewModelContract.View {
     private boolean isInit = false;
@@ -48,6 +35,7 @@ public class SplashActivity extends BaseActivity implements SplashViewModelContr
     public ProgressDialog downloadProgress;
     private String updateLocation;
     private FirebaseAnalytics mFirebaseAnalytics;
+
     protected Lifecycle.ViewModel getViewModel() {
         return splashViewModel;
     }
@@ -66,27 +54,23 @@ public class SplashActivity extends BaseActivity implements SplashViewModelContr
         setContentView(R.layout.activity_splash);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-
-            }
-        });
-        List<String> testDeviceIds = Arrays.asList("F8B846125A3D8A8BBEA68195D12D547F");
-        RequestConfiguration configuration =
-                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-        MobileAds.setRequestConfiguration(configuration);
-
     }
+
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Toast.makeText(this.getBaseContext(), "Can not go back!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Can not go back!", Toast.LENGTH_LONG).show();
             return true;
         }
+
         return false;
+
     }
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -98,9 +82,10 @@ public class SplashActivity extends BaseActivity implements SplashViewModelContr
         if(!isInit){
             if (getPermissionStatus("android.permission.WRITE_EXTERNAL_STORAGE") != 0) {
                 requestStoragePermission();
-            } else{
-                splashViewModel.checkForUpdate();
-                isInit = true;
+            } else {
+                /*splashViewModel.checkForUpdate();
+                isInit = true;*/
+                splashViewModel.login();
             }
         }
     }
@@ -155,8 +140,9 @@ public class SplashActivity extends BaseActivity implements SplashViewModelContr
             return;
         }
         if (getPermissionStatus("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
-            splashViewModel.checkForUpdate();
-            isInit = true;
+            /*splashViewModel.checkForUpdate();
+            isInit = true;*/
+            splashViewModel.login();
         } else {
             finishActivity();
         }
@@ -209,12 +195,13 @@ public class SplashActivity extends BaseActivity implements SplashViewModelContr
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode != 1) {
+        if (requestCode != 1 && requestCode != 4168) {
             finishActivity();
         }
         if (getPermissionStatus("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
-            splashViewModel.checkForUpdate();
-            isInit = true;
+            /*splashViewModel.checkForUpdate();
+            isInit = true;*/
+            splashViewModel.login();
         } else {
             finishActivity();
         }

@@ -1,21 +1,29 @@
 {
   "project_info": {
-    "project_number": "974620506787",
-    "firebase_url": "https://super-tv-add.firebaseio.com",
-    "project_id": "super-tv-add",
-    "storage_bucket": "super-tv-add.appspot.com"
+    "project_number": "1040632819756",
+    "firebase_url": "https://supertv-ultra-e82e1.firebaseio.com",
+    "project_id": "supertv-ultra-e82e1",
+    "storage_bucket": "supertv-ultra-e82e1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:974620506787:android:282710e2d2176877035d16",
+        "mobilesdk_app_id": "1:1040632819756:android:1723a5b0763e709ab6a189",
         "android_client_info": {
           "package_name": "com.uni.julio.supertvplus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "974620506787-0hm37e16gtjdmoplu5hflalqln10q3s0.apps.googleusercontent.com",
+          "client_id": "1040632819756-puecdftjnt6fgq3v93iuboialitjud4u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uni.julio.supertvplus",
+            "certificate_hash": "7da48b08a6b8733724d6110ecf9d2e3b4f728655"
+          }
+        },
+        {
+          "client_id": "1040632819756-dclvo3jr1chugn2vk2ngm7agklu8or6a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.uni.julio.supertvplus",
@@ -23,25 +31,26 @@
           }
         },
         {
-          "client_id": "974620506787-6d2jhvu69nsevaqdrbicgqqa3sva69j6.apps.googleusercontent.com",
+          "client_id": "1040632819756-afs3uala0aspkl8dclt2l5sa9gt908k2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDw0YF321bCgRUH6VHUmPKJZfscRLyl730"
+          "current_key": "AIzaSyALq9Jb_qDm_Bl9hhjbAbuwPXnRvxXZDwA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "974620506787-6d2jhvu69nsevaqdrbicgqqa3sva69j6.apps.googleusercontent.com",
+              "client_id": "1040632819756-afs3uala0aspkl8dclt2l5sa9gt908k2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-4520177535902533~2322513727"
     }
   ],
   "configuration_version": "1"

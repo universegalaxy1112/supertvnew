@@ -119,11 +119,13 @@
     <string name="login_error_already_registered">Este dispositivo ya está registrado a otro usuario.</string>
     <string name="login_error_no_authorized">Este dispositivo no está autorizado.</string>
     <string name="login_error_usr_pss_incorrect">Usuario o contraseña incorrectos.</string>
+    <string name="sign_incorrect_character">usuario muy corto o caracteres no permitidos.</string>
     <string name="login_error_generic">No se pudo iniciar sesión [CODE].</string>
     <string name="login_error_nosession">No se pudo iniciar sesión.</string>
 
     <string name="login_error_demo">Las cuentas de demostración no pueden ser usadas en Android. Por favor comunícate con el Administrador para solicitar una cuenta real.</string>
     <string name="ip_limitation">Es necesario usar la misma ip</string>
+    <string name="email_duplication">Email already exists.</string>
     <!--<string name="login_error_change_account">Este dispositivo está ligado a otra cuenta, desea usar una cuenta nueva?</string>-->
     <string name="login_error_change_account">Este dispositivo está ligado a otra cuenta. \nPor favor comunícate con tu Administrador con el siguiente identificador:\n{ID}</string>
     <!--<string name="login_error_change_device">Esta cuenta está ligada con otro dispositivo, desea cambiar a éste?</string>-->
@@ -201,5 +203,16 @@
     <string name="type_code">Please type your verification code</string>
     <string name="we_sent_email_confirm_code">We\'ve sent the confirmation code to \n your email. Please enter the code.</string>
     <string name="already_have_account">Already have an account?</string>
-    <string name="resend">Resend</string>
+    <string name="resend">Resend the Code</string>
+    <string name="ad_tag_url"><![CDATA[https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=]]></string>
+    <string name="pass_no_match">Password no match!</string>
+    <string name="membership_permission">You don\'t have permission to view this video. Do you want to upgrade?</string>
+    <string name="select_plan">Select the plan that\'s right for you.</string>
+    <string name="currency_symbol">USD</string>
+    <string name="plan_duration">/MO</string>
+    <string name="current_plan">(Current Plan)</string>
+    <string name="manage_subscription_on_play_store">Manage Subscription</string>
+    <string name="manage_membership">Manage Membership</string>
+    <string name="cancel_subscriptions_play_store">Cancel Subscription</string>
+    <string name="consider_cancel">You have two subscriptions live. Please consider cancelling one of them.</string>
 </resources>

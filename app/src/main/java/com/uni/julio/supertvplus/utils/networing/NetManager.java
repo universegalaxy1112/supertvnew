@@ -140,31 +140,58 @@ public class NetManager {
                     }
                 });
     }
+
+    public void performSignUp(String email, String userName, String pass, final StringRequestListener stringRequestListener) {
+        LiveTVServicesManual.performSignUp(email, userName, pass, stringRequestListener)
+                .delay(2, TimeUnit.SECONDS, Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean result) {
+
+                    }
+                });
+    }
+
     public void getCastDevices(MovieDetailsViewModelContract.View viewcallback){
         CastDevice castDevice = new CastDevice();
         castDevice.setName("New");
         viewcallback.onDeviceLoaded(castDevice);
 
     }
+
     public void getMessages(String user,StringRequestListener stringRequestListener){
-        LiveTVServicesManual.getMessages(user,stringRequestListener).delay(2,TimeUnit.SECONDS, Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        LiveTVServicesManual.getMessages(user, stringRequestListener).delay(2,TimeUnit.SECONDS, Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Boolean>() {
                     @Override
                     public void onCompleted() {
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
+
                     }
 
                     @Override
                     public void onNext(Boolean aBoolean) {
+
                     }
                 });
     }
 
-    public void performLoginCode(String user,String code,String device_id, StringRequestListener stringRequestListener) {
-        LiveTVServicesManual.performLoginCode(user,code,device_id, stringRequestListener).delay(2, TimeUnit.SECONDS, Schedulers.io())
+    public void performLoginCode(String user,String code,String device_id, String content, StringRequestListener stringRequestListener) {
+        LiveTVServicesManual.performLoginCode(user,code,device_id, content, stringRequestListener).delay(2, TimeUnit.SECONDS, Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe( new Subscriber<Boolean>() {
             public void onCompleted() {
 
@@ -196,12 +223,11 @@ public class NetManager {
                 .subscribe(new Subscriber<List<LiveTVCategory>>() {
                     @Override
                     public void onCompleted() {
-                        //System.out.println("Categories for main category completed");
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ;//Log.d("liveTV","retrieveLiveTVPrograms error "+e.getMessage());
                         liveTVCategoryResponseListener.onError();
                     }
 
@@ -213,36 +239,26 @@ public class NetManager {
                         else {
                             List<Observable<LiveTVCategory>> observableList = new ArrayList<>();
                             for (final LiveTVCategory cat : liveTVCategories) {
-                                ;//Log.d("liveTV", "NetManager liveTVCategories : " + cat.getCatName());
                                 observableList.add(LiveTVServicesManual.getProgramsForLiveTVCategory(cat));
                             }
 
                             VideoStreamManager.getInstance().resetLiveTVCategory(liveTVCategories.size());
-
-                            ;//Log.d("liveTV", "NetManager Start loading programs for LIVETV categories");
                             Observable.mergeDelayError(observableList)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Observer<LiveTVCategory>() {
                                         @Override
                                         public void onCompleted() {
-                                            ;//Log.d("liveTV", "All list retrieved here onCompleted()");
-//                                            listener.onAllMoviesForCategoriesLoaded(mainCategory);
                                             liveTVCategoryResponseListener.onProgramsForLiveTVCategoriesCompleted();
                                         }
 
                                         @Override
                                         public void onError(Throwable e) {
-                                            ;//Log.d("liveTV", "NetManager getProgramsForLiveTVCategory error "+e.getMessage());
                                             liveTVCategoryResponseListener.onProgramsForLiveTVCategoryError(null);
                                         }
 
                                         @Override
                                         public void onNext(LiveTVCategory liveTVCategory) {
-//                                            ;//Log.d("liveTV", "I have the movie list for " + movies.getCategory().getCatName() + " with elements " + movies.getMovieList().size());
-
-                                            ;//Log.d("liveTV", "NetManager LOADED liveTVCategories : " + liveTVCategory.getCatName());
-                                            ;//Log.d("liveTV", "NetManager  " + liveTVCategory.getLivePrograms().size());
                                             liveTVCategoryResponseListener.onProgramsForLiveTVCategoryCompleted(liveTVCategory);
                                         }
                                     });

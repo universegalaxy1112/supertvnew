@@ -91,6 +91,11 @@ public class LoadingMoviesViewModel implements LoadingMoviesViewModelContract.Vi
     @Override
     public void onSubCategoriesLoaded(MainCategory mainCategory, List<MovieCategory> movieCategories) {
 
+        if(movieCategories == null) {
+            viewCallback.onSubCategoriesForMainCategoryLoadedError();
+            return;
+        }
+
         MovieCategory movieCategory1=new MovieCategory();
         movieCategory1.setCatName("Favorite");
         int mainCategoryId = mainCategory.getId();

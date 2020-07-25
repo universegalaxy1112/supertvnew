@@ -42,7 +42,8 @@ public class MultiSeasonDetailActivity extends BaseActivity implements EpisodeDe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mAdView.destroy();
+        if(mAdView != null)
+            mAdView.destroy();
     }
 
     @Override
@@ -82,7 +83,7 @@ public class MultiSeasonDetailActivity extends BaseActivity implements EpisodeDe
             activityMultiSeasonDetailBinding= DataBindingUtil.setContentView(this, R.layout.activity_multi_season_detail);
             showMovieDetails(serie,mainCategoryId);
             User user = LiveTvApplication.getUser();
-            if(user == null || !user.getMembership()) {
+            if(user == null || user.getSubscription().showAds()) {
                 mAdView = findViewById(R.id.adView);
                 if(mAdView != null) {
                     AdRequest adRequest = new AdRequest.Builder().build();

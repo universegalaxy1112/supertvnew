@@ -139,7 +139,7 @@
                                         android:paddingRight="10dp"
                                         style="@style/text.description"
                                         android:gravity="left"
-                                        app:setDate="@{user.expiration_date}"
+                                        app:setDate="@{user.subscription.getExpiration_date()}"
                                         />
                                 </LinearLayout>
                                 <LinearLayout
@@ -269,11 +269,11 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:cardBackgroundColor="@color/transparent"
                         android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/dip_4"
                         app:cardCornerRadius="@dimen/dip_12"
-                        app:cardUseCompatPadding="true"
-                        >
+                        app:cardBackgroundColor="@color/transparent"
+                        app:cardUseCompatPadding="true">
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -282,7 +282,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 style="@style/play_text"
-                                android:text="Cerrar sesión"
+                                android:text="Cerrar Sesión"
                                 android:onClick="@{accountDetailsVM::onCloseSession}"
                                 />
                         </RelativeLayout>
@@ -290,11 +290,11 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dip_4"
                         app:cardBackgroundColor="@color/transparent"
                         android:layout_gravity="center"
                         app:cardCornerRadius="@dimen/dip_12"
-                        app:cardUseCompatPadding="true"
-                        >
+                        app:cardUseCompatPadding="true">
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -303,8 +303,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 style="@style/play_text"
-                                android:text="Test Speed"
-                                />
+                                android:text="@string/manage_membership" />
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
 

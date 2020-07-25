@@ -14,10 +14,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.uni.julio.supertvplus.LiveTvApplication;
 import com.uni.julio.supertvplus.R;
 import com.uni.julio.supertvplus.databinding.ActivityLivetvnewBinding;
+import com.uni.julio.supertvplus.listeners.DialogListener;
 import com.uni.julio.supertvplus.listeners.LiveProgramSelectedListener;
 import com.uni.julio.supertvplus.model.LiveProgram;
+import com.uni.julio.supertvplus.model.User;
+import com.uni.julio.supertvplus.utils.Dialogs;
 import com.uni.julio.supertvplus.view.exoplayer.VideoPlayFragment;
 import com.uni.julio.supertvplus.viewmodel.Lifecycle;
 import com.uni.julio.supertvplus.viewmodel.LiveTVViewModel;
@@ -67,7 +71,28 @@ public class LiveTvNewActivity extends BaseActivity  implements LiveProgramSelec
             }
         });
         liveTVViewModel.showProgramList(activityLiveBinding);
+        User user = LiveTvApplication.getUser();
+        if(user != null) {
+            if(!user.getSubscription().hasAccessPremium()) {
+                Dialogs.showTwoButtonsDialog(this,R.string.accept ,  (R.string.cancel),  R.string.membership_permission,  new DialogListener() {
+                    public void onAccept() {
+                        startActivity(new Intent(LiveTvNewActivity.this, SubscribeActivity.class));
+                        finishActivity();
+                    }
 
+                    public void onCancel() {
+                        finishActivity();
+                    }
+
+                    @Override
+                    public void onDismiss() {
+                        finishActivity();
+                    }
+                });
+                return;
+            }
+        }else
+            return;
     }
 
     private void initExoplayerSize(final int width, final int height) {

@@ -31,6 +31,7 @@ public class Downloader {
     private DownloaderBroadcastReceiver receiverDownloadComplete;
 
     private Downloader() {
+
     }
 
     public static Downloader getInstance() {

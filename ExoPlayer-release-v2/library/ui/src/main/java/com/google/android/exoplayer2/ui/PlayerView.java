@@ -162,7 +162,7 @@ import java.util.List;
  *       inflated by the child {@link PlayerControlView}. See below for more details.
  *       <ul>
  *         <li>Corresponding method: None
- *         <li>Default: {@code R.layout.exo_player_control_view}
+ *         <li>Default: {@code R.layout.exo_player_control_viewa}
  *       </ul>
  *   <li>All attributes that can be set on {@link PlayerControlView} and {@link DefaultTimeBar} can
  *       also be set on a PlayerView, and will be propagated to the inflated {@link

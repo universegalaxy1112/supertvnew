@@ -142,7 +142,7 @@
                         android:paddingRight="10dp"
                         style="@style/text.description"
                         android:gravity="left"
-                        app:setDate="@{user.expiration_date}"
+                        app:setDate="@{user.subscription.expiration_date}"
                         />
                 </LinearLayout>
                 <LinearLayout
@@ -278,7 +278,6 @@
                         android:layout_height="wrap_content"
                         app:cardBackgroundColor="@color/transparent"
                         android:layout_gravity="center"
-                        app:cardCornerRadius="@dimen/dip_12"
                         app:cardUseCompatPadding="true"
                         >
                         <RelativeLayout
@@ -289,7 +288,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 style="@style/play_text"
-                                android:text="Cerrar sesión"
+                                android:text="Cerrar Sesión"
                                 android:onClick="@{accountDetailsVM::onCloseSession}"
                                 />
                         </RelativeLayout>
@@ -299,7 +298,6 @@
                         android:layout_height="wrap_content"
                         app:cardBackgroundColor="@color/transparent"
                         android:layout_gravity="center"
-                        app:cardCornerRadius="@dimen/dip_12"
                         app:cardUseCompatPadding="true">
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -309,7 +307,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 style="@style/play_text"
-                                android:text="Test Speed"
+                                android:text="@string/manage_membership"
                                 />
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>

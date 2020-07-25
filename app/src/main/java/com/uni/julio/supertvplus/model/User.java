@@ -3,15 +3,15 @@ package com.uni.julio.supertvplus.model;
 public class User {
 
     private String name;
-    private String expiration_date;
+    private String email;
+    private Subscription subscription;
     private String device;
     private String version;
     private String user_agent;
-    private String user_name;
     private String password;
     private String deviceId;
     private int adultos = 0;
-    private boolean hasMembership = false;
+    private int device_num = 0;
 
     public String getVersion() {
         return version;
@@ -28,13 +28,20 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getExpiration_date() {
-        return expiration_date;
+    public String getEmail() {
+        return email;
     }
 
-    public void setExpiration_date(String expiration_date) {
-        this.expiration_date = expiration_date;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Subscription getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(Subscription subscription) {
+        this.subscription = subscription;
     }
 
     public String getDevice() {
@@ -53,13 +60,6 @@ public class User {
         this.user_agent = user_agent;
     }
 
-    public String getUser_name() {
-        return user_name;
-    }
-
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
 
     public String getPassword() {
         return password;
@@ -84,14 +84,13 @@ public class User {
     public int getAdultos() {
         return this.adultos;
     }
-    public boolean getMembership() {
-        return this.hasMembership;
+
+    public void setDevice_num(int num) {
+        this.device_num = num;
     }
 
-    public void setHasMembership(boolean hasMembership) {
-        this.hasMembership = hasMembership;
+    public int getDevice_num() {
+        return this.device_num;
     }
-
-
 
 }

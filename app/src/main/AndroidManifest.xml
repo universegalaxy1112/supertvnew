@@ -36,7 +36,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-9466046154130133~6761555835"/>
+            android:value="ca-app-pub-4520177535902533~2322513727"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.uni.julio.supertvplus.fileprovider"
@@ -70,7 +70,7 @@
 
         <activity
             android:name="com.uni.julio.supertvplus.view.VideoPlayActivity"
-            android:configChanges="keyboard|keyboardHidden|navigation"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|touchscreen|smallestScreenSize"
             android:screenOrientation="landscape"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
@@ -86,7 +86,19 @@
             android:theme="@style/SuperTvDefault.NoActionBar" />
         <activity
             android:name="com.uni.julio.supertvplus.view.LoginActivity"
-            android:configChanges="keyboard|keyboardHidden"
+            android:configChanges="keyboard|keyboardHidden|navigation"
+            android:theme="@style/SuperTvDefault.NoActionBar" />
+        <activity
+            android:name="com.uni.julio.supertvplus.view.SignUp"
+            android:configChanges="keyboard|keyboardHidden|navigation"
+            android:theme="@style/SuperTvDefault.NoActionBar" />
+        <activity
+            android:name="com.uni.julio.supertvplus.view.SubscribeActivity"
+            android:configChanges="keyboard|keyboardHidden|navigation"
+            android:theme="@style/SuperTvDefault.NoActionBar" />
+        <activity
+            android:name="com.uni.julio.supertvplus.view.EmailVerifyActivity"
+            android:configChanges="keyboard|keyboardHidden|navigation"
             android:theme="@style/SuperTvDefault.NoActionBar" />
         <activity
             android:name="com.uni.julio.supertvplus.view.MultiSeasonDetailActivity"
@@ -94,7 +106,7 @@
             android:theme="@style/SuperTvDefault.NoActionBar" />
         <activity
             android:name="com.uni.julio.supertvplus.view.exoplayer.VideoPlayFragment"
-            android:configChanges="keyboard|keyboardHidden"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|touchscreen|smallestScreenSize"
             android:screenOrientation="landscape"
             android:theme="@style/SuperTvDefault.NoActionBar" />
 

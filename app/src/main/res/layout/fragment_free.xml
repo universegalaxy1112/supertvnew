@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@color/bg_general">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/currency_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_12"
+                android:text="@string/currency_symbol"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/text_price_plan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textSize="@dimen/sp_48"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_12"
+                android:text="@string/plan_duration"
+                android:textColor="@color/light_gray"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_current_plan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/current_plan"
+            android:textSize="@dimen/sp_10"
+            android:textColor="@color/light_gray"
+            android:visibility="gone"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/white"
+            android:layout_marginBottom="@dimen/dip_8"
+            android:layout_marginTop="@dimen/dip_8" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="top">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="2"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="2">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_24"
+                    android:layout_marginTop="@dimen/dip_24"
+                    android:gravity="start">
+
+                    <net.steamcrafted.materialiconlib.MaterialIconView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:focusable="false"
+                        android:scaleType="center"
+                        android:layout_marginEnd="@dimen/dip_4"
+                        app:materialIcon="check"
+                        app:materialIconColor="@color/white"
+                        app:materialIconSize="@dimen/dip_20" />
+
+                    <TextView
+                        android:id="@+id/text_service1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:text="Live, Movies, Series"
+                        android:textColor="@color/textview_selector"
+                        android:textSize="@dimen/sp_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_24"
+                    android:gravity="left">
+
+                    <net.steamcrafted.materialiconlib.MaterialIconView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:focusable="false"
+                        android:scaleType="center"
+                        android:layout_marginEnd="@dimen/dip_4"
+                        app:materialIcon="check"
+                        app:materialIconColor="@color/white"
+                        app:materialIconSize="@dimen/dip_20" />
+
+                    <TextView
+                        android:id="@+id/text_service2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:text="Only 1 device"
+                        android:textColor="@color/textview_selector"
+                        android:textSize="@dimen/sp_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_24"
+                    android:gravity="left">
+
+                    <net.steamcrafted.materialiconlib.MaterialIconView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:focusable="false"
+                        android:scaleType="center"
+                        android:layout_marginEnd="@dimen/dip_4"
+                        app:materialIcon="check"
+                        app:materialIconColor="@color/white"
+                        app:materialIconSize="@dimen/dip_20" />
+
+                    <TextView
+                        android:id="@+id/text_service3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:text="Contain Ads"
+                        android:textColor="@color/textview_selector"
+                        android:textSize="@dimen/sp_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="2"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/plan_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            style="@style/text.description" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dip_16"
+            android:layout_marginBottom="@dimen/dip_16"
+            app:cardBackgroundColor="@color/transparent"
+            app:cardElevation="0dp"
+            android:layout_gravity="center">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/choose_plan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/play_text"
+                    android:text="CHOOSE PLAN"
+                    />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>
+
+</LinearLayout>

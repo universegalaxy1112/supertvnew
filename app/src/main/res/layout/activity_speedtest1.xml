@@ -154,7 +154,7 @@
             android:layout_gravity="center"
             android:focusable="false"
             android:scaleType="center"
-            android:layout_marginRight="@dimen/dip_4"
+            android:layout_marginEnd="@dimen/dip_4"
             app:materialIcon="server_network"
             app:materialIconColor="@color/kids_sliding_menu_bg"
             app:materialIconSize="@dimen/dip_20" />

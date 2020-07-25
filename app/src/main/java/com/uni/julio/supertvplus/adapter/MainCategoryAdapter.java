@@ -50,6 +50,7 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
         mContext=context;
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
@@ -60,7 +61,7 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((WindowManager)(mContext.getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay().getMetrics(displayMetrics);
             int screenWidth = displayMetrics.widthPixels;
             int px=(int)mContext.getResources().getDisplayMetrics().density*50;
-            int width=(screenWidth-2*mContext.getResources().getInteger(R.integer.main_padding)*Integer.parseInt(mContext.getString(R.string.maincategory_column_num))-px)/Integer.parseInt(mContext.getString(R.string.maincategory_column_num));
+            int width=(screenWidth-3*mContext.getResources().getInteger(R.integer.main_padding)*Integer.parseInt(mContext.getString(R.string.maincategory_column_num))-px)/Integer.parseInt(mContext.getString(R.string.maincategory_column_num));
             ViewGroup.LayoutParams params= new ViewGroup.LayoutParams(width, (width));
             itemView.setLayoutParams(params);
         }

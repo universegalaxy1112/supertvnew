@@ -1,5 +1,9 @@
 package com.uni.julio.supertvplus.view;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -16,10 +20,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.SkuDetails;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -28,44 +39,39 @@ import com.google.android.gms.tasks.Task;
 /*
 import com.google.firebase.messaging.FirebaseMessaging;
 */
+import com.google.gson.Gson;
+import com.uni.julio.supertvplus.Constants;
 import com.uni.julio.supertvplus.LiveTvApplication;
 import com.uni.julio.supertvplus.R;
 import com.uni.julio.supertvplus.helper.TVRecyclerView;
 import com.uni.julio.supertvplus.listeners.DialogListener;
 import com.uni.julio.supertvplus.listeners.NotificationListener;
+import com.uni.julio.supertvplus.listeners.StringRequestListener;
 import com.uni.julio.supertvplus.model.MainCategory;
 import com.uni.julio.supertvplus.model.ModelTypes;
 import com.uni.julio.supertvplus.model.User;
 import com.uni.julio.supertvplus.service.NotificationReceiveService;
+import com.uni.julio.supertvplus.utils.BillingClientLifecycle;
+import com.uni.julio.supertvplus.utils.BillingViewModel;
 import com.uni.julio.supertvplus.utils.DataManager;
 import com.uni.julio.supertvplus.utils.Device;
 import com.uni.julio.supertvplus.utils.Dialogs;
 import com.uni.julio.supertvplus.utils.Tracking;
+import com.uni.julio.supertvplus.utils.networing.NetManager;
+import com.uni.julio.supertvplus.utils.networing.WebConfig;
 import com.uni.julio.supertvplus.viewmodel.Lifecycle;
 import com.uni.julio.supertvplus.viewmodel.MainCategoriesMenuViewModel;
 import com.uni.julio.supertvplus.viewmodel.MainCategoriesMenuViewModelContract;
+
+import java.util.List;
 
 
 public class MainActivity extends BaseActivity implements MainCategoriesMenuViewModelContract.View, NotificationListener {
     private MainCategoriesMenuViewModel mainCategoriesMenuViewModel;
     private boolean requested=false;
     private InterstitialAd mInterstitialAd;
-
-    @Override
-    protected Lifecycle.ViewModel getViewModel() {
-        return mainCategoriesMenuViewModel;
-    }
-
-    @Override
-    protected Lifecycle.View getLifecycleView() {
-        return this;
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
+    private BillingClientLifecycle billingClientLifecycle;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +85,7 @@ public class MainActivity extends BaseActivity implements MainCategoriesMenuView
             findViewById(R.id.Appbarlayout).setVisibility(View.GONE);
         }
         User user = LiveTvApplication.getUser();
-        if(user == null || !user.getMembership()) {
+        if(user == null || user.getSubscription().showAds()) {
             mInterstitialAd = new InterstitialAd(this);
             mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
             mInterstitialAd.loadAd(new AdRequest.Builder().build());
@@ -87,7 +93,7 @@ public class MainActivity extends BaseActivity implements MainCategoriesMenuView
                 @Override
                 public void onAdLoaded() {
                     super.onAdLoaded();
-
+                    mInterstitialAd.loadAd(new AdRequest.Builder().build());
                 }
 
                 @Override
@@ -110,8 +116,37 @@ public class MainActivity extends BaseActivity implements MainCategoriesMenuView
             },500);
         }
 
+        billingClientLifecycle = ((LiveTvApplication)getApplication()).getBillingClientLifecycle();
+        getLifecycle().addObserver(billingClientLifecycle);
+
+        billingClientLifecycle.purchaseUpdateEvent.observe(this, new Observer<List<Purchase>>() {
+            @Override
+            public void onChanged(List<Purchase> purchases) {
+                if (purchases != null) {
+                    if(purchases.size() == 2)
+                        Dialogs.showOneButtonDialog(MainActivity.this, R.string.verify_unknown_sources, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                }
+            }
+        });
+
     }
 
+
+
+    @Override
+    protected Lifecycle.ViewModel getViewModel() {
+        return mainCategoriesMenuViewModel;
+    }
+
+    @Override
+    protected Lifecycle.View getLifecycleView() {
+        return this;
+    }
 
 
     @Override
@@ -119,6 +154,7 @@ public class MainActivity extends BaseActivity implements MainCategoriesMenuView
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
     @Override
     public void onResume(){
          super.onResume();
@@ -163,8 +199,7 @@ public class MainActivity extends BaseActivity implements MainCategoriesMenuView
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Tracking.getInstance().setAction("Sleeping");
-            Tracking.getInstance().track();
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -173,7 +208,8 @@ public class MainActivity extends BaseActivity implements MainCategoriesMenuView
 
                         @Override
                         public void onAccept() {
-                            android.os.Process.killProcess(android.os.Process.myPid());
+                            finishAffinity();
+                            System.exit(0);
                         }
 
                         @Override
@@ -216,7 +252,7 @@ public class MainActivity extends BaseActivity implements MainCategoriesMenuView
             openPasswordDialog(pin);
         }
         else {
-            if(mInterstitialAd != null && mInterstitialAd.isLoaded())
+            if(LiveTvApplication.getUser().getSubscription().showAds() && mInterstitialAd != null && mInterstitialAd.isLoaded())
                 mInterstitialAd.show();
             else
                 startLoading(mainCategoryId);
@@ -287,7 +323,6 @@ public class MainActivity extends BaseActivity implements MainCategoriesMenuView
 
     private void showPopup(){
 
-        String device_num = DataManager.getInstance().getString("device_num","");
         User user = LiveTvApplication.getUser();
         if(LiveTvApplication.appContext instanceof MainActivity){
             final MaterialDialog dialog=new MaterialDialog.Builder(this)
@@ -299,7 +334,7 @@ public class MainActivity extends BaseActivity implements MainCategoriesMenuView
             TextView titleView= dialog.getCustomView().findViewById(R.id.title);
             TextView contentView= dialog.getCustomView().findViewById(R.id.content);
             titleView.setText(R.string.attention);
-            contentView.setText("Estimado " + ((user ==  null) ? "" : user.getName()) + ", " + " Tu fecha de Vencimiento es: " + user.getExpiration_date()+" Y tienes "+ device_num+" Dispositivos Conectados.");
+            contentView.setText("Estimado " + ((user ==  null) ? "" : user.getName()) + ", " + " Tu fecha de Vencimiento es: " + user.getSubscription().getExpiration_date()+" Y tienes "+ user.getDevice_num()+" Dispositivos Conectados.");
             TextView cancel = dialog.getCustomView().findViewById(R.id.cancel);
             cancel.setVisibility(View.GONE);
             new Handler().postDelayed(new Runnable() {

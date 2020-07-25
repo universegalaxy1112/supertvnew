@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 
+import com.uni.julio.supertvplus.LiveTvApplication;
 import com.uni.julio.supertvplus.R;
 import com.uni.julio.supertvplus.databinding.ActivityAccountBinding;
 import com.uni.julio.supertvplus.utils.DataManager;
@@ -39,13 +40,16 @@ public class AccountActivity extends BaseActivity implements AccountDetailsViewM
         Toolbar toolbar = activityAccountBinding.toolbar;
         toolbar.setTitle("Mi Cuenta");
         setSupportActionBar(toolbar);
+
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
         if(Device.treatAsBox){
              (activityAccountBinding.Appbarlayout).setVisibility(View.GONE);
         }
+
         accountDetailsViewModel = new AccountDetailsViewModel(getActivity(), activityAccountBinding);
         activityAccountBinding.setAccountDetailsVM(accountDetailsViewModel);
         accountDetailsViewModel.showAccountDetails();
@@ -53,16 +57,21 @@ public class AccountActivity extends BaseActivity implements AccountDetailsViewM
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchActivity(SpeedTestActivity.class);
+                launchActivity(SubscribeActivity.class);
             }
         });
     }
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ((LiveTvApplication)getApplication()).getBillingClientLifecycle().queryPurchases();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override

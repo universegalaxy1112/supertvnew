@@ -17,15 +17,18 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         >
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_weight="5"
-            >
+            android:layout_weight="5">
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -88,27 +91,19 @@
                             android:layout_height="wrap_content">
                             <com.bosphere.fadingedgelayout.FadingEdgeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="3000dp"
                                 app:fel_edge="top"
                                 app:fel_size_top="@dimen/dip_100">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:background="@color/detail_background"
                                     android:minHeight="@dimen/dip_500"
                                     android:orientation="vertical"
                                     android:paddingLeft="@dimen/dip_12"
                                     android:paddingTop="@dimen/dip_90"
                                     android:paddingRight="@dimen/dip_12">
-                                    <com.google.android.gms.ads.AdView
-                                        android:id="@+id/adView"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/dip_4"
-                                        ads:adSize="BANNER"
-                                        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
-                                    </com.google.android.gms.ads.AdView>
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -233,7 +228,18 @@
                                         </androidx.cardview.widget.CardView>
 
                                     </LinearLayout>
-
+                                    <com.google.android.gms.ads.AdView
+                                        android:id="@+id/adView"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/dip_4"
+                                        android:layout_alignParentBottom="true"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        ads:adSize="BANNER"
+                                        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+                                    </com.google.android.gms.ads.AdView>
                                     <TextView
                                         android:id="@+id/description"
                                         style="@style/text.subtitle"
@@ -274,7 +280,7 @@
                                             style="@style/text.subtitle"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginRight="4dp"
+                                            android:layout_marginEnd="4dp"
                                             android:text="Director" />
 
                                         <TextView
@@ -287,18 +293,20 @@
 
                                     <com.google.android.material.tabs.TabLayout
                                         android:id="@+id/detail_tab"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="@dimen/dip_28"
-                                        android:layout_gravity="left"
-                                        android:layout_marginTop="12dp"
-                                        android:layout_marginBottom="12dp"
-                                        android:clipToPadding="false"
-                                        app:tabBackground="@drawable/tabbackground"
-                                        app:tabIndicatorColor="@color/netflix_red"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="@dimen/dip_32"
+                                        android:layout_marginBottom="@dimen/dip_32"
+                                        android:layout_marginTop="@dimen/dip_32"
+                                        android:layout_gravity="center"
+                                        android:focusable="true"
+                                        android:background="@drawable/tab_layout_background"
+                                        app:tabBackground="@drawable/tab_layout_selector"
                                         app:tabMode="scrollable"
-                                        app:tabSelectedTextColor="@color/white"
-                                        app:tabTextAppearance="@style/text.tab"
-                                        app:tabTextColor="@color/grey"/>
+                                        app:tabRippleColor="@null"
+                                        app:tabIndicatorColor="@color/transparent"
+                                        app:tabSelectedTextColor="@color/black"
+                                        app:tabTextAppearance="@style/text.episode_title"
+                                        app:tabTextColor="@color/black" />
                                 </LinearLayout>
                             </com.bosphere.fadingedgelayout.FadingEdgeLayout>
                             <LinearLayout
@@ -425,7 +433,8 @@
                     </LinearLayout>
                 </ScrollView>
             </FrameLayout>
-        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
@@ -439,4 +448,5 @@
                 app:focusDrawable="@drawable/moviesborder"/>
         </LinearLayout>
     </LinearLayout>
+
 </layout>

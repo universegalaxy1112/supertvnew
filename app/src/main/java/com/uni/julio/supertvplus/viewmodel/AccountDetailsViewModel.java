@@ -81,7 +81,7 @@ public class AccountDetailsViewModel implements AccountDetailsViewModelContract.
             this.isLoading.set(true);
             final User user = LiveTvApplication.getUser();
             if (user != null) {
-                String url=WebConfig.getMessage.replace("{USER}", user.getName());
+                String url = WebConfig.getMessage.replace("{USER}", user.getName());
                 NetManager.getInstance().makeStringRequest(url, new StringRequestListener() {
                     public void onCompleted(String response) {
                         AccountDetailsViewModel.this.isLoading.set(false);
@@ -119,7 +119,7 @@ public class AccountDetailsViewModel implements AccountDetailsViewModelContract.
         if (Connectivity.isConnected()) {
             this.isLoading.set(true);
             if (LiveTvApplication.getUser() != null) {
-                String url=WebConfig.removeUserURL.replace("{USER}", LiveTvApplication.getUser().getName()).replace("{DEVICE_ID}",LiveTvApplication.getUser().getDeviceId());
+                String url=WebConfig.removeUserURL.replace("{USER}", LiveTvApplication.getUser().getEmail()).replace("{DEVICE_ID}",LiveTvApplication.getUser().getDeviceId());
                 NetManager.getInstance().makeStringRequest(url, new StringRequestListener() {
                     public void onCompleted(String response) {
                         if (response.toLowerCase().contains("success")) {

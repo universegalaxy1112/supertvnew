@@ -96,7 +96,7 @@ import java.util.Locale;
  *       below for more details.
  *       <ul>
  *         <li>Corresponding method: None
- *         <li>Default: {@code R.layout.exo_player_control_view}
+ *         <li>Default: {@code R.layout.exo_player_control_viewa}
  *       </ul>
  *   <li>All attributes that can be set on {@link DefaultTimeBar} can also be set on a
  *       PlayerControlView, and will be propagated to the inflated {@link DefaultTimeBar} unless the
@@ -106,7 +106,7 @@ import java.util.Locale;
  * <h3>Overriding the layout file</h3>
  *
  * To customize the layout of PlayerControlView throughout your app, or just for certain
- * configurations, you can define {@code exo_player_control_view.xml} layout files in your
+ * configurations, you can define {@code exo_player_control_viewa.xml} layout files in your
  * application {@code res/layout*} directories. These layouts will override the one provided by the
  * ExoPlayer library, and will be inflated for use by PlayerControlView. The view identifies and
  * binds its children by looking for the following ids:
@@ -177,11 +177,11 @@ import java.util.Locale;
  *
  * <h3>Specifying a custom layout file</h3>
  *
- * Defining your own {@code exo_player_control_view.xml} is useful to customize the layout of
+ * Defining your own {@code exo_player_control_viewa.xml} is useful to customize the layout of
  * PlayerControlView throughout your application. It's also possible to customize the layout for a
  * single instance in a layout file. This is achieved by setting the {@code controller_layout_id}
  * attribute on a PlayerControlView. This will cause the specified layout to be inflated instead of
- * {@code exo_player_control_view.xml} for only the instance on which the attribute is set.
+ * {@code exo_player_control_viewa.xml} for only the instance on which the attribute is set.
  */
 public class PlayerControlView extends FrameLayout {
 

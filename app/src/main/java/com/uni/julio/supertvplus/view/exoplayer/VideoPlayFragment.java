@@ -17,28 +17,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextClock;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.BindingAdapter;
 import androidx.fragment.app.Fragment;
-
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.PlaybackPreparer;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.RenderersFactory;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
-import com.google.android.exoplayer2.drm.ExoMediaCrypto;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.drm.FrameworkMediaDrm;
 import com.google.android.exoplayer2.drm.HttpMediaDrmCallback;
-import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
+import com.google.android.exoplayer2.drm.StreamingDrmSessionManager;
 import com.google.android.exoplayer2.drm.UnsupportedDrmException;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
@@ -47,25 +44,32 @@ import com.google.android.exoplayer2.source.BehindLiveWindowException;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MergingMediaSource;
+import com.google.android.exoplayer2.source.SingleSampleMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.DebugTextViewHelper;
-import com.google.android.exoplayer2.ui.PlayerControlView;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.uni.julio.supertvplus.LiveTvApplication;
@@ -77,7 +81,8 @@ import com.uni.julio.supertvplus.utils.DataManager;
 import com.uni.julio.supertvplus.utils.Dialogs;
 import com.uni.julio.supertvplus.utils.Tracking;
 import com.uni.julio.supertvplus.view.SpeedTestActivity;
-import com.uni.julio.supertvplus.view.exoplayer.*;
+import com.uni.julio.supertvplus.listeners.DialogListener;
+import com.uni.julio.supertvplus.view.SpeedTestActivity;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -86,20 +91,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class VideoPlayFragment extends Fragment implements View.OnClickListener, Player.EventListener, PlaybackPreparer,  PlayerControlView.VisibilityListener{
+public class VideoPlayFragment extends Fragment implements View.OnClickListener, ExoPlayer.EventListener,  PlaybackControlView.VisibilityListener, RewardedVideoAdListener {
+    public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
+    public static final String DRM_LICENSE_URL = "drm_license_url";
+    public static final String DRM_KEY_REQUEST_PROPERTIES = "drm_key_request_properties";
+    public static final String PREFER_EXTENSION_DECODERS = "prefer_extension_decoders";
 
-    private static final String SPHERICAL_STEREO_MODE_EXTRA = "spherical_stereo_mode";
-    public static final String SPHERICAL_STEREO_MODE_MONO = "mono";
-    public static final String SPHERICAL_STEREO_MODE_TOP_BOTTOM = "top_bottom";
-    public static final String SPHERICAL_STEREO_MODE_LEFT_RIGHT = "left_right";
-
-    private static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
-    private static final String DRM_LICENSE_URL = "drm_license_url";
-    private static final String DRM_KEY_REQUEST_PROPERTIES = "drm_key_request_properties";
-    private static final String PREFER_EXTENSION_DECODERS = "prefer_extension_decoders";
-
-    private static final String ACTION_VIEW = "com.google.android.exoplayer.demo.action.VIEW";
-    private static final String EXTENSION_EXTRA = "extension";
+    public static final String ACTION_VIEW = "com.google.android.exoplayer.demo.action.VIEW";
+    public static final String EXTENSION_EXTRA = "extension";
 
     public static final String ACTION_VIEW_LIST = "com.google.android.exoplayer.demo.action.VIEW_LIST";
     public static final String URI_LIST_EXTRA = "uri_list";
@@ -115,7 +114,8 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
 
     private Handler mainHandler;
     private Timeline.Window window;
-    private PlayerView simpleExoPlayerView;
+    private EventLogger eventLogger;
+    private SimpleExoPlayerView simpleExoPlayerView;
     private LinearLayout debugRootView;
     private ConstraintLayout top_bar;
     private TextView titleText;
@@ -128,7 +128,6 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
     private DefaultTrackSelector trackSelector;
     private TrackSelectionHelper trackSelectionHelper;
     private DebugTextViewHelper debugViewHelper;
-    private EventLogger eventLogger;
     private boolean playerNeedsSource;
     private boolean shouldAutoPlay;
     private boolean isTimelineStatic;
@@ -141,12 +140,27 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
     private ProgressBar progressBarView;
     private int episodePosition = -1;
     private int seasonPosition = -1;
+    private String movieTitle = "";
     private MediaSource mediaSource;
+    private RewardedVideoAd mRewardedVideoAd;
+    private Handler handler = new Handler();
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if(LiveTvApplication.getUser().getSubscription().showAds()){
+                if(mRewardedVideoAd != null)
+                    mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+                            new AdRequest.Builder().build());
+                handler.postDelayed(this, 600000);
+            }
+
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         shouldAutoPlay = true;
-        mediaDataSourceFactory = buildDataSourceFactory(true);
+        mediaDataSourceFactory = buildDataSourceFactory(false);
         mainHandler = new Handler();
         window = new Timeline.Window();
         if (CookieHandler.getDefault() != DEFAULT_COOKIE_MANAGER) {
@@ -155,8 +169,10 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
         Intent intent = getActivity().getIntent();
         seasonPosition = intent.getIntExtra("seasonPosition", -1);
         episodePosition = intent.getIntExtra("episodePosition", -1);
-        this.title=intent.getStringExtra("title") == null ? "" : intent.getStringExtra("title") + ((seasonPosition == -1) ? "": " S" + (seasonPosition+1)) + ((seasonPosition == -1 || episodePosition == -1? "":" E"+ (episodePosition +1)));
-    }
+        movieTitle = intent.getStringExtra("title");
+        this.title = movieTitle == null ? "" : movieTitle + ((seasonPosition == -1) ? "": " S" + (seasonPosition+1)) + ((seasonPosition == -1 || episodePosition == -1? "":" E"+ (episodePosition +1)));
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getActivity());
+        mRewardedVideoAd.setRewardedVideoAdListener(this);    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -191,7 +207,7 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
         progressBarView =  rootPlayerView.findViewById(R.id.player_view_progress_bar);
         simpleExoPlayerView.setControllerVisibilityListener(this);
         simpleExoPlayerView.requestFocus();
-
+        initializePlayer();
         if (!isLiveTV) {
             hideNoChannelText.setVisibility(View.GONE);
         }else{
@@ -257,33 +273,53 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onStart(){
         super.onStart();
-        initializePlayer();
     }
     @Override
     public void onResume(){
         super.onResume();
+        if(player != null) {
+            player.setPlayWhenReady(true);
+            player.getPlaybackState();
+        }
+
+        this.handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable, 0);
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        releasePlayer();
+        if(player != null) {
+            player.setPlayWhenReady(false);
+            player.getPlaybackState();
+        }
+        this.handler.removeCallbacks(runnable);
     }
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         releasePlayer();
+
     }
     public void onNewIntent(Intent intent) {
         releasePlayer();
         isTimelineStatic = false;
         seasonPosition = intent.getIntExtra("seasonPosition", -1);
         episodePosition = intent.getIntExtra("episodePosition" , -1);
-        this.title=intent.getStringExtra("title") == null ? "" : intent.getStringExtra("title") + ((seasonPosition == -1) ? "": " S" + (seasonPosition+1)) + ((seasonPosition == -1 || episodePosition == -1? "":" E"+ (episodePosition +1)));
+        movieTitle = intent.getStringExtra("title");
+        this.title = movieTitle == null ? "" : movieTitle + ((seasonPosition == -1) ? "": " S" + (seasonPosition+1)) + ((seasonPosition == -1 || episodePosition == -1? "":" E"+ (episodePosition +1)));
         BindingAdapters.loadImage(channel_icon, intent.getStringExtra("icon_url"));
         Tracking.getInstance().setAction(this.title);
         Tracking.getInstance().track();
-        getActivity().setIntent(intent);
+        if(getActivity() != null) {
+            getActivity().setIntent(intent);
+            initializePlayer();
+        }
     }
 
     private void releasePlayer() {
@@ -297,9 +333,10 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
                 Timeline timeline = player.getCurrentTimeline();
                 if (!timeline.isEmpty() && timeline.getWindow(playerWindow, window).isSeekable) {
                     playerPosition = player.getCurrentPosition();
-                    DataManager.getInstance().saveDataLong("seconds"+movieId,playerPosition);
+                    DataManager.getInstance().saveDataLong("seconds" + movieId, playerPosition);
                 }
                 player.release();
+                simpleExoPlayerView.setPlayer(null);
                 player = null;
                 trackSelector = null;
                 trackSelectionHelper = null;
@@ -317,7 +354,7 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
             debugRootView.setVisibility(visibility);
         top_bar.setVisibility(visibility);
     }
-    @Override
+   /* @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             initializePlayer();
@@ -325,7 +362,7 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
             showToast(R.string.storage_permission_denied);
             getActivity().finish();
         }
-    }
+    }*/
     public void dispatchKeyEvent() {
         if(simpleExoPlayerView == null) return;
         simpleExoPlayerView.showController();
@@ -389,7 +426,7 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
     private void initializePlayer(){
         try{
             Intent intent = getActivity().getIntent();
-            //supertvplus add progressbar here
+            //SuperTV add progressbar here
             movieId = intent.getIntExtra(MOVIE_ID_EXTRA, -1);
             int mainCategory = intent.getIntExtra("mainCategoryId", -1);
             playerPosition = C.TIME_UNSET;
@@ -398,7 +435,7 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
                 boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
                 UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA)
                         ? UUID.fromString(intent.getStringExtra(DRM_SCHEME_UUID_EXTRA)) : null;
-                DrmSessionManager<ExoMediaCrypto> drmSessionManager = null;
+                DrmSessionManager<FrameworkMediaCrypto> drmSessionManager = null;
                 if (drmSchemeUuid != null) {
                     String drmLicenseUrl = intent.getStringExtra(DRM_LICENSE_URL);
                     String[] keyRequestPropertiesArray = intent.getStringArrayExtra(DRM_KEY_REQUEST_PROPERTIES);
@@ -412,25 +449,36 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
                                     keyRequestPropertiesArray[i + 1]);
                         }
                     }
-
+                    try {
+                        drmSessionManager = buildDrmSessionManager(drmSchemeUuid, drmLicenseUrl,
+                                keyRequestProperties);
+                    } catch (UnsupportedDrmException e) {
+                        int errorStringId = Util.SDK_INT < 18 ? R.string.error_drm_not_supported
+                                : (e.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
+                                ? R.string.error_drm_unsupported_scheme : R.string.error_drm_unknown);
+                        showToast(errorStringId);
+                        return;
+                    }
                 }
-                RenderersFactory extensionRendererMode =
-                        ((LiveTvApplication) getActivity().getApplication()).buildRenderersFactory(preferExtensionDecoders);
 
+                @SimpleExoPlayer.ExtensionRendererMode int extensionRendererMode =
+                        ((LiveTvApplication) getActivity().getApplication()).useExtensionRenderers()
+                                ? (preferExtensionDecoders ? SimpleExoPlayer.EXTENSION_RENDERER_MODE_PREFER
+                                : SimpleExoPlayer.EXTENSION_RENDERER_MODE_ON)
+                                : SimpleExoPlayer.EXTENSION_RENDERER_MODE_OFF;
                 TrackSelection.Factory videoTrackSelectionFactory =
-                        new AdaptiveTrackSelection.Factory();
+                        new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
                 trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
                 trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
+                player = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, new DefaultLoadControl(),
+                        drmSessionManager, extensionRendererMode);
 
-
-                player = ExoPlayerFactory.newSimpleInstance(getActivity(),extensionRendererMode, trackSelector, new DefaultLoadControl());
-                player.addListener(this);
 
                 eventLogger = new EventLogger(trackSelector);
-                player.addListener(eventLogger);
-                player.addAnalyticsListener(eventLogger);
-                player.addAnalyticsListener(eventLogger);
-                player.addMetadataOutput(eventLogger);
+                player.setAudioDebugListener(eventLogger);
+                player.setVideoDebugListener(eventLogger);
+                player.setId3Output(eventLogger);
+                player.addListener(this);
                 simpleExoPlayerView.setPlayer(player);
 
                 player.setPlayWhenReady(shouldAutoPlay);
@@ -469,17 +517,20 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
                 }
                 mediaSource = mediaSources.length == 1 ? mediaSources[0] : new ConcatenatingMediaSource(mediaSources);
 
-                //supertvplus add subtitles from SRT file
+                //SuperTV add subtitles from SRT file
                 String subsURL = intent.getStringExtra("subsURL");
                 if(!TextUtils.isEmpty(subsURL)) {
+                    Format textFormat = Format.createTextSampleFormat(null, MimeTypes.APPLICATION_SUBRIP, null, Format.NO_VALUE, Format.NO_VALUE, getString(R.string.tag_esp_srt), null);
+                    MediaSource textMediaSource = new SingleSampleMediaSource(Uri.parse(subsURL), mediaDataSourceFactory, textFormat, C.TIME_UNSET);
+                    MediaSource mediaSourceWithText = new MergingMediaSource(mediaSource, textMediaSource);
 
+                    player.prepare(mediaSourceWithText, !isTimelineStatic, !isTimelineStatic);
                 }
                 else {
                     player.prepare(mediaSource, !isTimelineStatic, !isTimelineStatic);
                 }
                 if(player != null)
                     player.seekTo(seasonPosition == -1 || episodePosition == -1 ? 0:episodePosition, 0);
-
                 if(mainCategory != 4 && intent.getIntExtra("type",1) != 2 && playerPosition != 0L) {//eventso
                     Dialogs.showTwoButtonsDialog((AppCompatActivity) this.getActivity(), R.string.accept, R.string.cancel, R.string.from_start, new DialogListener() {
                         @TargetApi(Build.VERSION_CODES.M)
@@ -512,25 +563,50 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
         return ((LiveTvApplication) getActivity().getApplication())
                 .buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
     }
+    public boolean isAvailable()
+    {
+        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
+        int resultCode = availability.isGooglePlayServicesAvailable(LiveTvApplication.getAppContext());
+        if(resultCode == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    private DrmSessionManager<FrameworkMediaCrypto> buildDrmSessionManager(UUID uuid,
+                                                                           String licenseUrl, Map<String, String> keyRequestProperties) throws UnsupportedDrmException {
+        if (Util.SDK_INT < 18) {
+            return null;
+        }
+        try {
+            HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(licenseUrl,
+                    buildHttpDataSourceFactory(false), keyRequestProperties);
+            return new StreamingDrmSessionManager<>(uuid,
+                    FrameworkMediaDrm.newInstance(uuid), drmCallback, null, mainHandler, eventLogger);
+        }catch (Exception e){
+            return null;
+        }
+
+    }
 
     private MediaSource buildMediaSource(Uri uri, String overrideExtension) {
         int type = Util.inferContentType(!TextUtils.isEmpty(overrideExtension) ? "." + overrideExtension
                 : uri.getLastPathSegment());
         switch (type) {
-            case C.TYPE_DASH:
-                return new DashMediaSource.Factory(mediaDataSourceFactory)
-                        .createMediaSource(uri);
             case C.TYPE_SS:
-                return new SsMediaSource.Factory(mediaDataSourceFactory)
-                        .createMediaSource(uri);
+                return new SsMediaSource(uri, buildDataSourceFactory(false),
+                        new DefaultSsChunkSource.Factory(mediaDataSourceFactory), mainHandler, eventLogger);
+            case C.TYPE_DASH:
+                return new DashMediaSource(uri, buildDataSourceFactory(false),
+                        new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mainHandler, eventLogger);
             case C.TYPE_HLS:
-                return new HlsMediaSource.Factory(mediaDataSourceFactory)
-                        .createMediaSource(uri);
+                return new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, eventLogger);
             case C.TYPE_OTHER:
-                return new ExtractorMediaSource.Factory(mediaDataSourceFactory)
-                        .createMediaSource(uri);
-            default:
+                return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
+                        mainHandler, eventLogger);
+            default: {
                 throw new IllegalStateException("Unsupported type: " + type);
+            }
         }
     }
 
@@ -553,7 +629,7 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
         for (int i = 0; i < mappedTrackInfo.length; i++) {
             TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(i);
             if (trackGroups.length != 0) {
-                if(player.getRendererType(i) != C.TRACK_TYPE_VIDEO) {//supertvplus
+                if(player.getRendererType(i) != C.TRACK_TYPE_VIDEO) {//SuperTV
                     Button button = new Button(getActivity());
                     button.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                         @Override
@@ -656,16 +732,21 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onPositionDiscontinuity(int reason) {
+    public void onPositionDiscontinuity() {
         if(player != null){
             episodePosition = player.getCurrentWindowIndex();
-            Intent intent = getActivity().getIntent();
-            this.title=intent.getStringExtra("title") == null ? "" :intent.getStringExtra("title") + ((seasonPosition == -1) ? "": " S" + (seasonPosition+1)) + ((seasonPosition == -1 || episodePosition == -1? "":" E"+ (episodePosition +1)));
+            this.title = movieTitle == null ? "" : movieTitle + ((seasonPosition == -1) ? "": " S" + (seasonPosition+1)) + ((seasonPosition == -1 || episodePosition == -1? "":" E"+ (episodePosition +1)));
             Tracking.getInstance().setAction(this.title);
             Tracking.getInstance().track();
         }
+
     }
 
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+        isTimelineStatic = !timeline.isEmpty()
+                && !timeline.getWindow(timeline.getWindowCount() - 1, window).isDynamic;
+    }
 
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
@@ -690,10 +771,8 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
 
     private void showControls() {
         if(!isLiveTV)
-        {
-            top_bar.setVisibility(View.VISIBLE);
             debugRootView.setVisibility(View.VISIBLE);
-        }
+        top_bar.setVisibility(View.VISIBLE);
     }
 
     private void showToastError() {
@@ -724,8 +803,46 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener,
         });
     }
 
+
     @Override
-    public void preparePlayback() {
-        player.retry();
+    public void onRewardedVideoAdLoaded() {
+        if (LiveTvApplication.getUser().getSubscription().showAds()  && mRewardedVideoAd.isLoaded()) {
+            mRewardedVideoAd.show();
+        }
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem) {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+
+    }
+
+    @Override
+    public void onRewardedVideoCompleted() {
+
     }
 }

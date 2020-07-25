@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_general">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/detail_tab"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dip_40"
+        android:layout_marginTop="@dimen/dip_32"
+        android:layout_gravity="center"
+        android:background="@drawable/tab_layout_background"
+        app:tabBackground="@drawable/tab_layout_selector"
+        app:tabMode="scrollable"
+        app:tabRippleColor="@null"
+        app:tabIndicatorColor="@color/transparent"
+        app:tabSelectedTextColor="@color/black"
+        app:tabTextAppearance="@style/text.episode_title"
+        app:tabTextColor="@color/black"
+        app:tabPaddingStart="@dimen/dip_24"
+        app:tabPaddingEnd="@dimen/dip_24">
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Free"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Premium"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Premium Plus"/>
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/pager"/>
+</LinearLayout>

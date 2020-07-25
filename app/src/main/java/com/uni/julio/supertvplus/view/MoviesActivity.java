@@ -47,7 +47,7 @@ public class MoviesActivity extends BaseActivity implements MoviesMenuViewModelC
             moviesMenuViewModel=new MoviesMenuViewModel(this);
             activityMoviesBinding= DataBindingUtil.setContentView(this,R.layout.activity_movies);
             activityMoviesBinding.setMoviesMenuFragmentVM(moviesMenuViewModel);
-            Bundle extras = getActivity().getIntent().getExtras();
+            Bundle extras = getIntent().getExtras();
             selectedType = (ModelTypes.SelectedType) extras.get("selectedType");
             mainCategoryId = extras.getInt("mainCategoryId",-1);
             movieCategoryId = extras.getInt("movieCategoryId",-1);

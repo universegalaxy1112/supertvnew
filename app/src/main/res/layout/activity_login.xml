@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/android_splash" />
     </LinearLayout>
+<!--
     <LinearLayout
         android:id="@+id/test"
         android:layout_width="match_parent"
@@ -29,16 +30,16 @@
             android:textSize="@dimen/sp_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_screen_username" />
+            android:text="@string/login_screen_email" />
         <EditText
-            android:id="@+id/edit_username"
+            android:id="@+id/edit_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/netflix_red"
             android:nextFocusDown="@id/edit_password"
             android:textColorHint="@color/netflix_red"
             android:inputType="textEmailAddress"
-            android:textSize="@dimen/sp_10"
+            android:textSize="@dimen/sp_12"
             android:imeOptions="actionNext"/>
         <View
             android:layout_width="match_parent"
@@ -60,7 +61,7 @@
             android:inputType="textPassword"
             android:textColorHint="@color/netflix_red"
             tools:ignore="InvalidImeActionId"
-            android:textSize="@dimen/sp_10"
+            android:textSize="@dimen/sp_12"
             android:imeOptions="actionDone"/>
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -86,6 +87,7 @@
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
+-->
 
     <RelativeLayout
         android:layout_weight="1"
@@ -99,7 +101,7 @@
             android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
+            <!--<LinearLayout
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_horizontal"
@@ -125,7 +127,7 @@
                     android:layout_height="0.5dp"
                     android:background="@color/white"
                     />
-            </LinearLayout>
+            </LinearLayout>-->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,13 +135,14 @@
                 app:cardBackgroundColor="@color/transparent"
                 app:cardCornerRadius="@dimen/dip_20">
                     <LinearLayout
-                     android:id="@+id/ll_FacebookSignin"
+                     android:id="@+id/ll_GoogleSignin"
                      android:gravity="center_vertical"
                      android:orientation="horizontal"
                      android:background="@drawable/background_google_signup"
-                     android:paddingTop="@dimen/dip_10"
-                     android:paddingBottom="@dimen/dip_10"
-                     android:paddingStart="@dimen/dip_8"
+                     style="@style/play_text"
+                     android:paddingTop="@dimen/dip_8"
+                     android:paddingBottom="@dimen/dip_8"
+                      android:paddingStart="@dimen/dip_8"
                      android:paddingEnd="@dimen/dip_8"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
@@ -206,11 +209,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <LinearLayout
-                    android:id="@+id/ll_SignUp"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:id="@+id/ll_SignUp"
                         android:textSize="@dimen/sp_12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

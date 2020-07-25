@@ -86,7 +86,7 @@ public class OneSeasonDetailActivity extends BaseActivity implements MovieDetail
             activityOneseaosnDetailBinding.setMovieDetailsVM(movieDetailsViewModel);
             showMovieDetails(movie,mainCategoryId);
             User user = LiveTvApplication.getUser();
-            if(user == null || !user.getMembership()) {
+            if(user == null || user.getSubscription().showAds()) {
                 mAdView = findViewById(R.id.adView);
                 if(mAdView != null) {
                     AdRequest adRequest = new AdRequest.Builder().build();

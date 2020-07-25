@@ -25,28 +25,13 @@ public class SearchTvActivity extends FragmentActivity {
 
     public void onResume(){
         super.onResume();
-        Tracking.getInstance().enableTrack(true);
-        Tracking.getInstance().enableSleep(false);
         Tracking.getInstance().setAction(getClass().getSimpleName());
-        Tracking.getInstance().track();
         LiveTvApplication.appContext = this;
     }
     @Override
     public void onPause(){
         try{
             super.onPause();
-            Tracking.getInstance().enableSleep(true);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(Tracking.getInstance().getSleep()){
-                        Tracking.getInstance().setAction("Sleeping");
-                        Tracking.getInstance().track();
-                        Tracking.getInstance().enableSleep(false);
-                        Tracking.getInstance().enableTrack(false);
-                    }
-                }
-            },1000);
             Context appCompatActivity= LiveTvApplication.appContext;
             if(this.equals(appCompatActivity))
                 LiveTvApplication.appContext = null;
